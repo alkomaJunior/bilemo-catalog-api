@@ -7,8 +7,14 @@
         "php": ">=8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-gd": "*",
+        "ext-intl": "*",
+        "ext-mbstring": "*",
+        "ext-sodium": "*",
+        "ext-xsl": "*",
         "composer/package-versions-deprecated": "1.11.99.4",
         "doctrine/annotations": "^1.13",
+        "doctrine/dbal": "^3.2",
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.10",
@@ -18,6 +24,7 @@
         "lexik/jwt-authentication-bundle": "^2.14",
         "nelmio/api-doc-bundle": "^4.6",
         "nelmio/cors-bundle": "^2.1",
+        "psr/link": "1.0.*",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "5.3.*",
@@ -27,6 +34,7 @@
         "symfony/flex": "^1.3.1",
         "symfony/framework-bundle": "5.3.*",
         "symfony/http-foundation": "5.3.*",
+        "symfony/monolog-bundle": "^3.7",
         "symfony/proxy-manager-bridge": "5.3.*",
         "symfony/runtime": "5.3.*",
         "symfony/security-bundle": "5.3.*",
@@ -64,11 +72,16 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
+        "_comment": {
+            "post-install-cmd": [
+                "@auto-scripts"
+            ],
+            "post-update-cmd": [
+                "@auto-scripts"
+            ]
+        },
+        "compile": [
+            "php bin/console doctrine:migrations:migrate"
         ]
     },
     "conflict": {

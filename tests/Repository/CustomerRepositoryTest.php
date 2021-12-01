@@ -73,5 +73,6 @@ class CustomerRepositoryTest extends KernelTestCase
 
         $this->assertIsNotArray($customer);
         $this->assertIsObject($customer);
+        $this->assertIsInt($customer->getId());
     }
 }

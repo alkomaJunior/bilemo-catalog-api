@@ -20,6 +20,9 @@ class CustomerResourceTest extends KernelTestCase
             ->setZipCode(60995)
             ->setContact("+22899556688")
             ->setType("Enterprise")
+            ->setSlug("stars")
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setUpdatedAt(new \DateTimeImmutable())
         ;
     }
 
@@ -60,9 +63,12 @@ class CustomerResourceTest extends KernelTestCase
         $this->assertIsString($customer->setAddress("cusAddress")->getAddress());
         $this->assertIsString($customer->setCity("cusCity")->getCity());
         $this->assertIsString($customer->setCountry("cusCountry")->getCountry());
+        $this->assertIsString($customer->setSlug("stars")->getSlug());
         $this->assertIsNotString($customer->setZipCode(12345)->getZipCode());
         $this->assertIsString($customer->setType("cusType")->getType());
         $this->assertIsString($customer->setContact("cusContact")->getContact());
         $this->assertIsObject($customer->setUser($user)->getUser());
+        $this->assertIsObject($customer->setCreatedAt(new \DateTimeImmutable())->getCreatedAt());
+        $this->assertIsObject($customer->setUpdatedAt(new \DateTimeImmutable())->getUpdatedAt());
     }
 }

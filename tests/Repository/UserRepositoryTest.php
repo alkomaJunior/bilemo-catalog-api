@@ -7,7 +7,6 @@ use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserRepositoryTest extends KernelTestCase
 {
@@ -95,6 +94,7 @@ class UserRepositoryTest extends KernelTestCase
                 $passwordHasher->hashPassword($oldUser, "fakePassword")
             );
             $this->assertNotEquals($oldUser->getPassword(), $user->getPassword());
+            $this->assertIsInt($user->getId());
         }
     }
 }

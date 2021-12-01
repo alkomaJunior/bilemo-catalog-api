@@ -86,14 +86,6 @@ class Customer
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    private function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
     public function getFullName(): ?string
     {
         return $this->fullName;

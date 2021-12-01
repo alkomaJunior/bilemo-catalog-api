@@ -1,0 +1,11 @@
+App\Entity\Resource\Customer:
+  customer{1..10}:
+    fullName: customer<current()>
+    type: custromerType<current()>
+    address: custromerAddress<current()>
+    zipCode: 12345
+    country: custromerCountry<current()>
+    city: custromerCity<current()>
+    email: customer<current()>\@domain.com
+    contact: custromerContact<current()>
+    slug: custromer<current()>

@@ -1,5 +1,5 @@
 App\Entity\Resource\Customer:
-  customer{1..10}:
+  customers{1..10}:
     fullName: customer<current()>
     type: custromerType<current()>
     address: custromerAddress<current()>

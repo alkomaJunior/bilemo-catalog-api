@@ -1,8 +1,8 @@
 nelmio_api_doc:
     documentation:
         info:
-            title: My App
-            description: This is an awesome app!
+            title: BileMo Catalog-API
+            description: Built for you our lovely customers/partners, it enable you to access our phone catalog!
             version: 1.0.0
     areas: # to filter documented areas
         path_patterns:

@@ -1,3 +1,9 @@
+# Browse your documentation with Swagger UI
+app.swagger_ui:
+    path: /api/doc
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+
 # Expose your documentation as JSON swagger compliant
 app.swagger:
     path: /api/doc.json

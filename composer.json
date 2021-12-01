@@ -79,7 +79,10 @@
             "post-update-cmd": [
                 "@auto-scripts"
             ]
-        }
+        },
+        "compile": [
+            "php bin/console cache:clear"
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"

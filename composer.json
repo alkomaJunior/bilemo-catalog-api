@@ -6,8 +6,8 @@
     "require": {
         "php": ">=8.0",
         "ext-ctype": "*",
-        "ext-iconv": "*",
         "ext-gd": "*",
+        "ext-iconv": "*",
         "ext-intl": "*",
         "ext-mbstring": "*",
         "ext-sodium": "*",

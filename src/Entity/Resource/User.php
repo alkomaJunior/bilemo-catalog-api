@@ -27,7 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({ "listUser", "showUser", "listCustomer" })
+     * @Serializer\Groups({ "listUser", "showUser" })
      */
     private ?int $id = null;
 
@@ -35,13 +35,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(groups={ "createUser" })
      * @Assert\Email(groups={ "createUser" })
-     * @Serializer\Groups({ "listUser", "showUser", "listCustomer" })
+     * @Serializer\Groups({ "listUser", "showUser" })
      */
     private ?string $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Serializer\Groups({ "showUser", "listCustomer" })
+     * @Serializer\Groups({ "showUser" })
      * @Serializer\Type ("array")
      * @Assert\EqualTo(value={"ROLE_CUSTOMER_USER"}, groups={ "createUser" })
      */

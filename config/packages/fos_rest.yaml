@@ -20,9 +20,6 @@ sensio_framework_extra:
     converters: true
 
 fos_rest:
-  zone:
-    - { path: ^/api/* }
-
   param_fetcher_listener: true
 
   allowed_methods_listener:  true

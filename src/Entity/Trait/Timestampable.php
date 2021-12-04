@@ -11,13 +11,13 @@ trait Timestampable
 {
     /**
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     * @Serializer\Groups({ "listUser", "showUser" })
+     * @Serializer\Groups({ "listUser", "showUser", "listProduct", "showProduct" })
      */
     private ?DateTimeInterface $createdAt = null;
 
     /**
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     * @Serializer\Groups({ "listUser", "showUser" })
+     * @Serializer\Groups({ "listUser", "showUser", "listProduct", "showProduct" })
      */
     private ?DateTimeInterface $updatedAt = null;
 

@@ -4,7 +4,6 @@ namespace App\Tests\Entity\Resource;
 
 use App\Entity\Resource\Customer;
 use App\Entity\Resource\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

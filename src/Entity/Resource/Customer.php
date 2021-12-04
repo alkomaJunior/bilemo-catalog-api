@@ -2,11 +2,11 @@
 
 namespace App\Entity\Resource;
 
+use App\Entity\Trait\Slug;
+use App\Entity\Trait\Timestampable;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Trait\Timestampable;
-use App\Entity\Trait\Slug;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Validator\Constraints as Assert;
 

@@ -2,14 +2,14 @@
 
 namespace App\Entity\Resource;
 
+use App\Entity\Trait\Slug;
+use App\Entity\Trait\Timestampable;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use App\Entity\Trait\Timestampable;
-use App\Entity\Trait\Slug;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -52,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      * @Assert\NotBlank(groups={ "createUser" })
      * @Assert\Length(min=8)
-     * @Serializer\Groups({ "showUser", "listCustomer" })
+     * @Serializer\Groups({ "showUser" })
      */
     private string $password;
 

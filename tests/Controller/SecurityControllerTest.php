@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Controller;
 
 use App\Controller\SecurityController;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;

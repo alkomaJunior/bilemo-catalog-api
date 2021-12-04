@@ -61,8 +61,6 @@ class CustomerResourceTest extends KernelTestCase
                 ->setPassword("fakePass")
         ];
 
-        $usersCollection = new ArrayCollection($users);
-
         $this->assertIsString($customer->setEmail("entreprise@some.where")->getEmail());
         $this->assertIsString($customer->setFullName("cusName")->getFullName());
         $this->assertIsString($customer->setAddress("cusAddress")->getAddress());

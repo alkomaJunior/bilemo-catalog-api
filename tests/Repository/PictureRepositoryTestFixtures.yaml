@@ -1,0 +1,3 @@
+App\Entity\Resource\Picture:
+  picture{1..10}:
+    pictureUrl: productUrl<current()>

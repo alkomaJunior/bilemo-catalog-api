@@ -1,0 +1,7 @@
+App\Entity\Resource\Product:
+  product{1..10}:
+    name: product<current()>
+    price: 12344
+    description: description<current()>
+    brand: brand<current()>
+    slug: custromer<current()>

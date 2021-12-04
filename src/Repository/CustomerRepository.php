@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Resource\Customer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Customer|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,10 +15,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CustomerRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Customer::class);
     }
+
 
     // /**
     //  * @return Customer[] Returns an array of Customer objects

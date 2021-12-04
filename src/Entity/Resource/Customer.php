@@ -3,9 +3,11 @@
 namespace App\Entity\Resource;
 
 use App\Repository\CustomerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Trait\Timestampable;
 use App\Entity\Trait\Slug;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -23,7 +25,7 @@ class Customer
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -77,9 +79,14 @@ class Customer
     private ?string $contact;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="customer", cascade={"remove"}, fetch="EAGER")
      */
-    private ?User $user;
+    private mixed $users;
+
+    #[Pure] public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -182,14 +189,32 @@ class Customer
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return ArrayCollection
+     */
+    public function getUsers(): ArrayCollection
     {
-        return $this->user;
+        return $this->users;
     }
 
-    public function setUser(?User $user): self
+    public function addUser(User $user): self
     {
-        $this->user = $user;
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getCustomer() === $this) {
+                $user->setCustomer(null);
+            }
+        }
 
         return $this;
     }

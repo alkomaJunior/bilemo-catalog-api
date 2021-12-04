@@ -3,10 +3,9 @@
 namespace App\Entity\Resource;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
+use JMS\Serializer\Annotation as Serializer;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Trait\Timestampable;
@@ -16,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`users`")
+ * @UniqueEntity("email")
  * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -27,38 +27,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({ "listUser", "showUser", "listCustomer" })
      */
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\NotBlank(groups={ "createUser" })
+     * @Assert\Email(groups={ "createUser" })
+     * @Serializer\Groups({ "listUser", "showUser", "listCustomer" })
      */
     private ?string $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Serializer\Groups({ "showUser", "listCustomer" })
+     * @Serializer\Type ("array")
+     * @Assert\EqualTo(value={"ROLE_CUSTOMER_USER"}, groups={ "createUser" })
      */
     private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={ "createUser" })
+     * @Assert\Length(min=8)
+     * @Serializer\Groups({ "showUser", "listCustomer" })
      */
     private string $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=Customer::class, mappedBy="user")
+     * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="users", cascade={"persist"}, fetch="EAGER")
+     * @Serializer\Groups({ "showUser" })
      */
-    private Collection $customers;
-
-    #[Pure]
-    public function __construct()
-    {
-        $this->customers = new ArrayCollection();
-    }
+    private ?Customer $customer = null;
 
     public function getId(): ?int
     {
@@ -75,14 +77,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
-    }
-
-    /**
-     * @param ArrayCollection|Collection $customers
-     */
-    public function setCustomers(ArrayCollection|Collection $customers): void
-    {
-        $this->customers = $customers;
     }
 
     /**
@@ -156,32 +150,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
     }
 
-    /**
-     * @return Collection
-     */
-    public function getCustomers(): Collection
+    public function getCustomer(): ?Customer
     {
-        return $this->customers;
+        return $this->customer;
     }
 
-    public function addCustomer(Customer $customer): self
+    public function setCustomer(?Customer $customer): self
     {
-        if (!$this->customers->contains($customer)) {
-            $this->customers[] = $customer;
-            $customer->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCustomer(Customer $customer): self
-    {
-        if ($this->customers->removeElement($customer)) {
-            // set the owning side to null (unless already changed)
-            if ($customer->getUser() === $this) {
-                $customer->setUser(null);
-            }
-        }
+        $this->customer = $customer;
 
         return $this;
     }

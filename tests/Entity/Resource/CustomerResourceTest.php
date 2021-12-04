@@ -4,6 +4,7 @@ namespace App\Tests\Entity\Resource;
 
 use App\Entity\Resource\Customer;
 use App\Entity\Resource\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -43,20 +44,24 @@ class CustomerResourceTest extends KernelTestCase
     {
         $this->assertHasErrors(
             $this->getEntity()
-                ->setCity("")
-                ->setEmail("ng-stars")
-                ->setZipCode(-123),
-            3,
+                ->setCity(""),
+            1,
         );
     }
 
     public function testGettersSetters()
     {
         $customer = $this->getEntity();
-        $user = (new User())
-            ->setEmail("ngstars@some.where")
-            ->setPassword("fakePass")
-        ;
+        $users = [
+            (new User())
+                ->setEmail("ngstars@some.where")
+                ->setPassword("fakePass"),
+            (new User())
+                ->setEmail("logo@some.where")
+                ->setPassword("fakePass")
+        ];
+
+        $usersCollection = new ArrayCollection($users);
 
         $this->assertIsString($customer->setEmail("entreprise@some.where")->getEmail());
         $this->assertIsString($customer->setFullName("cusName")->getFullName());
@@ -67,7 +72,8 @@ class CustomerResourceTest extends KernelTestCase
         $this->assertIsNotString($customer->setZipCode(12345)->getZipCode());
         $this->assertIsString($customer->setType("cusType")->getType());
         $this->assertIsString($customer->setContact("cusContact")->getContact());
-        $this->assertIsObject($customer->setUser($user)->getUser());
+        $this->assertIsObject($customer->addUser($users[1])->removeUser($users[1]));
+        $this->assertCount(0, $customer->removeUser($users[0])->getUsers());
         $this->assertIsObject($customer->setCreatedAt(new \DateTimeImmutable())->getCreatedAt());
         $this->assertIsObject($customer->setUpdatedAt(new \DateTimeImmutable())->getUpdatedAt());
     }

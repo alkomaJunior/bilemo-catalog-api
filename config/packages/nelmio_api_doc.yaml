@@ -2,8 +2,259 @@ nelmio_api_doc:
     documentation:
         info:
             title: BileMo Catalog-API
-            description: Built for you our lovely customers/partners, it enable you to access our phone catalog!
+            description: Built for you our lovely customers/partners, it enable you to access our product catalog!
             version: 1.0.0
+
+        servers:
+            - url: https://bilemo-catalog-api.herokuapp.com/
+              description: Main server.
+            - url: https://bilemo.wip/
+              description: Alternative server.
+
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+
+            schemas:
+                createUsers:
+                    type: object
+                    properties:
+                        email:
+                            type: string
+                            example: user@some.where
+                        password:
+                            type: string
+                            example: hash password string
+                        roles:
+                            type: array
+                            items:
+                                type: string
+                            example: [ "ROLE_CUSTOMER_USER" ]
+                        customer:
+                            type: object
+                            properties:
+                                id:
+                                    type: integer
+                                    format: int64
+                                    example: 1
+                        slug:
+                            type: string
+                            example: user name (lowercase)
+
+                listUsers:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            format: int64
+                            example: 1
+                        eamil:
+                            type: string
+                            example: user@some.where
+                        created_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
+
+                showUser:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            format: int64
+                            example: 14
+                        email:
+                            type: string
+                            example: user@some.where
+                        customer:
+                            allOf:
+                                - $ref: '#/components/schemas/showCustomer'
+                        created_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
+                        updated_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
+                        slug:
+                            type: string
+                            example: user name (lowercase)
+
+                showCustomer:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            format: int64
+                            example: 6
+                        full_name:
+                            type: string
+                            example: Customer name
+                        customer_type:
+                            type: string
+                            example: Customer type
+                        address:
+                            type: string
+                            example: Road numbet + road name
+                        zip_code:
+                            type: integer
+                            format: int64
+                            example: 12345 (min length is 3)
+                        country:
+                            type: string
+                            example: Customer country
+                        city:
+                            type: string
+                            example: Customer city
+                        email:
+                            type: string
+                            example: customer.name@some.where
+                        contact:
+                            type: string
+                            example: +3394689348300
+                        created_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
+                        updated_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
+                        slug:
+                            type: string
+                            example: customer name (lowercase)
+
+                Error:
+                    type: object
+                    properties:
+                        code:
+                            type: integer
+                            format: int64
+                            example: 400...500
+                        error:
+                            type: string
+                            example: Error message
+
+        security:
+            - Bearer: [ ]
+
+        tags:
+            - name: Customers
+              description: Everything about customers
+            - name: Users
+              description: Everything about Users
+
+        paths:
+            /api/users:
+                get:
+                    tags:
+                        - Users
+                    summary: Returns a list of users.
+                    description: These request lists general information about users with their relative customer.
+                    parameters:
+                        - in: query
+                          name: page
+                          schema:
+                              type: integer
+                          description: The current page of the paginated users list.
+                        - in: query
+                          name: limit
+                          schema:
+                              type: integer
+                          description: The numbers of users to return per page.
+                    responses:
+                        '200':
+                            description: Ok! Return a JSON array of users list.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/listUsers'
+                        '404':
+                            description: Not found! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+                post:
+                    tags:
+                        - Users
+                    summary: Create new user.
+                    description: These request enable the creation of users with appropriate customer.
+                    requestBody:
+                        description: Description of required parameters.
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/createUsers'
+                    responses:
+                        '201':
+                            description: Ok! Return the created user in JSON format.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/showUser'
+                        '400':
+                            description: Bad request! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+
+            /api/users/{id}:
+                get:
+                    tags:
+                        - Users
+                    summary: Gets a user by ID.
+                    description: A detailed description of the user.
+                    parameters:
+                        - name: id
+                          in: path
+                          description: User ID
+                          required: true
+                          schema:
+                              type: integer
+                              format: int64
+                              example: 7
+                    responses:
+                        '200':
+                            description: Ok! Return a detailed description of the user in JSON format.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/showUser'
+
+                        '404':
+                            description: User not found! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+                delete:
+                    tags:
+                        - Users
+                    summary: Delete a user by ID.
+                    description: Return an empty body.
+                    parameters:
+                        - name: id
+                          in: path
+                          description: User ID
+                          required: true
+                          schema:
+                              type: integer
+                              format: int64
+                              example: 24
+                    responses:
+                        '204':
+                            description: Ok No content! The user is successfully deleted.
+
+                        '404':
+                            description: User not found! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+
+
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

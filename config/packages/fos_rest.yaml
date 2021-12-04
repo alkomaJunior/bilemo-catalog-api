@@ -13,3 +13,40 @@
 #    format_listener:
 #        rules:
 #            - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
+
+sensio_framework_extra:
+  view: { annotations: false }
+  request:
+    converters: true
+
+fos_rest:
+  zone:
+    - { path: ^/api/* }
+
+  param_fetcher_listener: true
+
+  allowed_methods_listener:  true
+
+  body_converter:
+    enabled: true
+    validate: true
+    validation_errors_argument: violations
+
+  view:
+    formats: { json: true, xml: false, rss: false }
+    view_response_listener: force
+    jsonp_handler: ~
+
+  serializer:
+    serialize_null: true
+
+  format_listener:
+    rules:
+      - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
+      - { path: ^/, priorities: ['text/html', '*/*'], fallback_format: html, prefer_extension: true }
+
+  exception:
+    enabled: true
+    exception_listener: false
+    serializer_error_renderer: true
+    serialize_exceptions: false

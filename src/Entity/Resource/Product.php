@@ -11,16 +11,33 @@ use App\Entity\Trait\Slug;
 use JetBrains\PhpStorm\Pure;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ORM\Table(name="`products`")
  * @ORM\HasLifecycleCallbacks()
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "api_product_show",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "list",
+ *      href = @Hateoas\Route(
+ *          "api_product_list",
+ *          absolute = true
+ *      )
+ * )
  */
 class Product
 {
     use Slug;
     use Timestampable;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

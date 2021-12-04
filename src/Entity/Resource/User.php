@@ -11,12 +11,43 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`users`")
  * @UniqueEntity("email")
  * @ORM\HasLifecycleCallbacks()
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "api_user_show",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "list",
+ *      href = @Hateoas\Route(
+ *          "api_user_list",
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "create",
+ *      href = @Hateoas\Route(
+ *          "api_user_create",
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "api_user_delete",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {

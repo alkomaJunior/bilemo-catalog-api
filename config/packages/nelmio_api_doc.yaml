@@ -58,6 +58,23 @@ nelmio_api_doc:
                             type: string
                             example: "2021-12-01 21:27:00"
 
+                login:
+                    type: object
+                    properties:
+                        eamil:
+                            type: string
+                            example: user@some.where
+                        password:
+                            type: string
+                            example: user_password
+
+                token:
+                    type: object
+                    properties:
+                        token:
+                            type: string
+                            example: long string
+
                 showUser:
                     type: object
                     properties:
@@ -138,12 +155,50 @@ nelmio_api_doc:
             - Bearer: [ ]
 
         tags:
-            - name: Customers
-              description: Everything about customers
+            - name: Documentation
+              description: All information about the use of the API
             - name: Users
               description: Everything about Users
+            - name: Authentication
+              description: Authentication By token. The token will be required for all requests.
 
         paths:
+            /api/doc.json:
+                get:
+                    tags:
+                        - Documentation
+                    summary: Return the documentation in JSON format.
+                    description: Return the documentation in JSON format.
+                    responses:
+                        '200':
+                            description: Ok! Return a JSON array of users list.
+
+            /api/login_check:
+                post:
+                    tags:
+                        - Authentication
+                    summary: Authenticate a user.
+                    description: These request generate a token for a user that will be use for all request.
+                    requestBody:
+                        description: Description of required parameters.
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/login'
+                    responses:
+                        '201':
+                            description: Ok! Return a token.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/token'
+                        '401':
+                            description: Authentication problem! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
             /api/users:
                 get:
                     tags:
@@ -174,6 +229,12 @@ nelmio_api_doc:
                                 application/json:
                                     schema:
                                         $ref: '#/components/schemas/Error'
+                        '401':
+                            description: Unauthorized! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
                 post:
                     tags:
                         - Users
@@ -195,6 +256,12 @@ nelmio_api_doc:
                                         $ref: '#/components/schemas/showUser'
                         '400':
                             description: Bad request! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+                        '401':
+                            description: Unauthorized! Return a JSON array of code and error.
                             content:
                                 application/json:
                                     schema:
@@ -229,6 +296,12 @@ nelmio_api_doc:
                                 application/json:
                                     schema:
                                         $ref: '#/components/schemas/Error'
+                        '401':
+                            description: Unauthorized! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
                 delete:
                     tags:
                         - Users
@@ -249,6 +322,12 @@ nelmio_api_doc:
 
                         '404':
                             description: User not found! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+                        '401':
+                            description: Unauthorized! Return a JSON array of code and error.
                             content:
                                 application/json:
                                     schema:

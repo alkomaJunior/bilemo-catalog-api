@@ -32,7 +32,7 @@ class UserApiController extends AbstractFOSRestController
     /**
      * @Rest\Get(
      *     path="/users",
-     *     name="app_user_list"
+     *     name="api_user_list"
      * )
      * @Rest\QueryParam(
      *     name="limit",
@@ -54,7 +54,7 @@ class UserApiController extends AbstractFOSRestController
     /**
      * @Rest\Get(
      *     path="/users/{id}",
-     *     name="app_user_show",
+     *     name="api_user_show",
      *     requirements={"id"="\d+"}
      * )
      * @Rest\View(serializerGroups={ "Default", "items"="showUser" })
@@ -67,7 +67,7 @@ class UserApiController extends AbstractFOSRestController
     /**
      * @Rest\Post(
      *     path="/users",
-     *     name="app_user_create"
+     *     name="api_user_create"
      * )
      * @Rest\View(statusCode=201, serializerGroups={ "Default", "items"="showUser" })
      * @ParamConverter(
@@ -78,7 +78,7 @@ class UserApiController extends AbstractFOSRestController
      *     }
      * )
      */
-    public function createUser(User $user, ConstraintViolationList $violations): View
+    public function createUsers(User $user, ConstraintViolationList $violations): View
     {
         if (count($violations)) {
             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
@@ -99,7 +99,7 @@ class UserApiController extends AbstractFOSRestController
             $user,
             Response::HTTP_CREATED,
             [
-                'Location' => $this->generateUrl("app_user_show", [
+                'Location' => $this->generateUrl("api_user_show", [
                     'id' => $user->getId(),
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ])
@@ -111,7 +111,7 @@ class UserApiController extends AbstractFOSRestController
      * @Rest\View(StatusCode = 204)
      * @Rest\Delete(
      *     path = "/users/{id}",
-     *     name = "app_user_delete",
+     *     name = "api_user_delete",
      *     requirements = {"id"="\d+"}
      * )
      */

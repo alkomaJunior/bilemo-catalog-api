@@ -21,9 +21,48 @@ class UserEndpointsTest extends WebTestCase
         $this->databaseTool = $myContainer->get(DatabaseToolCollection::class)->get();
     }
 
-    public function testListUsers(): void
+    public function authenticateUser(): string
+    {
+        $this->databaseTool->loadAliceFixture([
+            self::$kernel->getProjectDir() . '/tests/Repository/UserRepositoryTestFixtures.yaml'
+        ]);
+
+        $this->client->request(
+            'POST',
+            '/api/login_check',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '
+                {
+                  "username": "user1@domain.com",
+                  "password": "fakePassword"
+                }
+            '
+        );
+
+        $content = $this->client->getResponse()->getContent();
+
+        return json_decode($content)->token;
+    }
+
+    public function testNonAuthenticatedListUser(): void
     {
         $this->client->request('GET', '/api/users');
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function testListUsers(): void
+    {
+        $this->client->request('GET', '/api/users',
+            [],
+            [],
+            [
+                'HTTP_Content-Type' => 'application/json',
+                'HTTP_Authorization' => 'Bearer ' . (string)$this->authenticateUser()
+            ]
+        );
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -32,7 +71,14 @@ class UserEndpointsTest extends WebTestCase
 
     public function testShowUserNotFound(): void
     {
-        $this->client->request('GET', '/api/users/19');
+        $this->client->request('GET', '/api/users/19',
+            [],
+            [],
+            [
+                'HTTP_Content-Type' => 'application/json',
+                'HTTP_Authorization' => 'Bearer ' . (string)$this->authenticateUser()
+            ]
+        );
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
         $this->assertResponseHasHeader("Content-Type");
@@ -44,7 +90,14 @@ class UserEndpointsTest extends WebTestCase
             self::$kernel->getProjectDir() . '/tests/Repository/UserRepositoryTestFixtures.yaml'
         ]);
 
-        $this->client->request('GET', '/api/users/1');
+        $this->client->request('GET', '/api/users/1',
+            [],
+            [],
+            [
+                'HTTP_Content-Type' => 'application/json',
+                'HTTP_Authorization' => 'Bearer ' . (string)$this->authenticateUser()
+            ]
+        );
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -58,17 +111,21 @@ class UserEndpointsTest extends WebTestCase
             '/api/users',
             [],
             [],
-            ['CONTENT_TYPE' => 'application/json'],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_Authorization' => 'Bearer ' . $this->authenticateUser(),
+            ],
             '
                 {
-                  "email": "mille@some.where",
+                  "email": "millet@some.where",
                   "password": "$argon2id$v=19$m=16,t=2,p=1$emo0b0hQWTV1NjdGNnNyQw$l9oSEgNuwdbji1VjjhWLiQ",
                   "roles": [
                      "ROLE_CUSTOMER_USER"
                    ],
-                  "slug": "mille"
+                  "slug": "millet"
                 }
-            '
+            ',
+            false
         );
         $this->assertResponseRedirects();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -79,9 +136,12 @@ class UserEndpointsTest extends WebTestCase
         $this->client->request(
             'POST',
             '/api/users',
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
+            array(),
+            array(),
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_Authorization' => 'Bearer ' . $this->authenticateUser(),
+            ],
             '
                 {
                   "email": "",
@@ -102,7 +162,14 @@ class UserEndpointsTest extends WebTestCase
             self::$kernel->getProjectDir() . '/tests/Repository/UserRepositoryTestFixtures.yaml'
         ]);
 
-        $this->client->request('DELETE', '/api/users/1');
+        $this->client->request('DELETE', '/api/users/1',
+            [],
+            [],
+            [
+                'HTTP_Content-Type' => 'application/json',
+                'HTTP_Authorization' => 'Bearer ' . (string)$this->authenticateUser()
+            ]
+        );
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }

@@ -9,7 +9,7 @@ trait Slug
 {
     /**
      * @ORM\Column(type="string", length=255)
-     * @Serializer\Groups({ "showUser" })
+     * @Serializer\Groups({ "showUser", "showProduct" })
      */
     private ?string $slug;
 

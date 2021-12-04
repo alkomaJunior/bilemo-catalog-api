@@ -2,13 +2,11 @@
 
 namespace App\Tests\Repository;
 
-use App\Entity\Resource\User;
 use App\Repository\UserRepository;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class UserRepositoryTest extends KernelTestCase
 {

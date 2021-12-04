@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Trait\Timestampable;
 use App\Entity\Trait\Slug;
 use JetBrains\PhpStorm\Pure;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,35 +25,41 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({ "showProduct", "listProduct" })
      */
     private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Serializer\Groups({ "showProduct", "listProduct" })
      */
     private ?string $name;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Serializer\Groups({ "showProduct", "listProduct" })
      */
     private ?float $price;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
+     * @Serializer\Groups({ "showProduct" })
      */
     private ?string $description;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Serializer\Groups({ "showProduct", "listProduct" })
      */
     private ?string $brand;
 
     /**
      * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="product")
+     * @Serializer\Groups({ "showProduct" })
      */
     private Collection $pictures;
 

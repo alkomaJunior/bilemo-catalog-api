@@ -51,12 +51,32 @@ nelmio_api_doc:
                             type: integer
                             format: int64
                             example: 1
-                        eamil:
+                        email:
                             type: string
                             example: user@some.where
                         created_at:
                             type: string
                             example: "2021-12-01 21:27:00"
+
+                listProducts:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            format: int64
+                            example: 1
+                        name:
+                            type: string
+                            example: Product name
+                        price:
+                            type: float
+                            example: 1234
+                        brand:
+                            type: string
+                            example: Product brand
+                        slug:
+                            type: string
+                            example: Product slug
 
                 login:
                     type: object
@@ -67,6 +87,23 @@ nelmio_api_doc:
                         password:
                             type: string
                             example: user_password
+
+                picture:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            format: int64
+                            example: 1
+                        picture_url:
+                            type: string
+                            example: https://www.w3schools.com/images/w3schools_logo_500_04AA6D.png
+                        created_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
+                        updated_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
 
                 token:
                     type: object
@@ -87,7 +124,7 @@ nelmio_api_doc:
                             example: user@some.where
                         customer:
                             allOf:
-                                - $ref: '#/components/schemas/showCustomer'
+                                - $ref: '#/components/schemas/customer'
                         created_at:
                             type: string
                             example: "2021-12-01 21:27:00"
@@ -98,7 +135,39 @@ nelmio_api_doc:
                             type: string
                             example: user name (lowercase)
 
-                showCustomer:
+                showProduct:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            format: int64
+                            example: 14
+                        name:
+                            type: string
+                            example: Product name
+                        price:
+                            type: float
+                            example: 1234
+                        description:
+                            type: string
+                            example: Product description
+                        pictures:
+                            allOf:
+                                - $ref: '#/components/schemas/picture'
+                        brand:
+                            type: string
+                            example: Product brand
+                        created_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
+                        updated_at:
+                            type: string
+                            example: "2021-12-01 21:27:00"
+                        slug:
+                            type: string
+                            example: Product slug
+
+                customer:
                     type: object
                     properties:
                         id:
@@ -161,6 +230,8 @@ nelmio_api_doc:
               description: Everything about Users
             - name: Authentication
               description: Authentication By token. The token will be required for all requests.
+            - name: Products
+              description: Everything about our product catalog.
 
         paths:
             /api/doc.json:
@@ -204,7 +275,7 @@ nelmio_api_doc:
                     tags:
                         - Users
                     summary: Returns a list of users.
-                    description: These request lists general information about users with their relative customer.
+                    description: These request lists general information about users with their relative customer. The defaut pagination is one user per page.
                     parameters:
                         - in: query
                           name: page
@@ -332,6 +403,79 @@ nelmio_api_doc:
                                 application/json:
                                     schema:
                                         $ref: '#/components/schemas/Error'
+            /api/products:
+                get:
+                    tags:
+                        - Products
+                    summary: Returns a list of products.
+                    description: These request lists general information about products. The defaut pagination is one product per page.
+                    parameters:
+                        - in: query
+                          name: page
+                          schema:
+                              type: integer
+                          description: The current page of the paginated products list.
+                        - in: query
+                          name: limit
+                          schema:
+                              type: integer
+                          description: The numbers of products to return per page.
+                    responses:
+                        '200':
+                            description: Ok! Return a JSON array of products list.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/listProducts'
+                        '404':
+                            description: Not found! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+                        '401':
+                            description: Unauthorized! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+
+            /api/products/{id}:
+                get:
+                    tags:
+                        - Products
+                    summary: Gets a product by ID.
+                    description: A detailed description of the product.
+                    parameters:
+                        - name: id
+                          in: path
+                          description: Product ID
+                          required: true
+                          schema:
+                              type: integer
+                              format: int64
+                              example: 7
+                    responses:
+                        '200':
+                            description: Ok! Return a detailed description of the product in JSON format.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/showProduct'
+
+                        '404':
+                            description: Product not found! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+                        '401':
+                            description: Unauthorized! Return a JSON array of code and error.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error'
+
 
 
     areas: # to filter documented areas

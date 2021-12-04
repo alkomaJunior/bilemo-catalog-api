@@ -4,4 +4,4 @@ App\Entity\Resource\Product:
     price: 12344
     description: description<current()>
     brand: brand<current()>
-    slug: custromer<current()>
+    slug: product<current()>

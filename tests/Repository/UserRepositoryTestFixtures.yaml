@@ -1,6 +1,6 @@
 App\Entity\Resource\User:
   user{1..10}:
     email: user<current()>\@domain.com
-    password: "\\$argon2i\\$v\\=19\\$m\\=16\\,t\\=2\\,p\\=1\\$dzdLa2pvMjhGVGcwM081Yw$lNxz8fPeNKDxahLlQf7QqQ"
-    roles: "['ROLE_CUSTOMER_USER']"
+    password: "\\$argon2i\\$v=19\\$m=16,t=2,p=1\\$dzdLa2pvMjhGVGcwM081Yw\\$lNxz8fPeNKDxahLlQf7QqQ"
+    roles: "[ROLE_CUSTOMER_USER]"
     slug: user<current()>

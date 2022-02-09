@@ -22,61 +22,88 @@ nelmio_api_doc:
                 createUsers:
                     type: object
                     properties:
-                        email:
+                        status:
                             type: string
-                            example: user@some.where
-                        password:
+                            example: Created!
+                        status_code:
+                            type: integer
+                            example: 201
+                        data:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    example: user@some.where
+                                password:
+                                    type: string
+                                    example: hash password string
+                                roles:
+                                    type: array
+                                    items:
+                                        type: string
+                                    example: [ "ROLE_CUSTOMER_USER" ]
+                                customer:
+                                    type: object
+                                    properties:
+                                        id:
+                                            type: integer
+                                            format: int64
+                                            example: 1
+                                slug:
+                                    type: string
+                                    example: user name (lowercase)
+
+                listUsers:
+                    type: object
+                    properties:
+                        status:
                             type: string
-                            example: hash password string
-                        roles:
-                            type: array
-                            items:
-                                type: string
-                            example: [ "ROLE_CUSTOMER_USER" ]
-                        customer:
+                            example: Ok!
+                        status_code:
+                            type: integer
+                            example: 200
+                        data:
                             type: object
                             properties:
                                 id:
                                     type: integer
                                     format: int64
                                     example: 1
-                        slug:
-                            type: string
-                            example: user name (lowercase)
-
-                listUsers:
-                    type: object
-                    properties:
-                        id:
-                            type: integer
-                            format: int64
-                            example: 1
-                        email:
-                            type: string
-                            example: user@some.where
-                        created_at:
-                            type: string
-                            example: "2021-12-01 21:27:00"
+                                email:
+                                    type: string
+                                    example: user@some.where
+                                created_at:
+                                    type: string
+                                    example: "2021-12-01 21:27:00"
 
                 listProducts:
                     type: object
                     properties:
-                        id:
+                        status:
+                            type: string
+                            example: Ok!
+                        status_code:
                             type: integer
-                            format: int64
-                            example: 1
-                        name:
-                            type: string
-                            example: Product name
-                        price:
-                            type: float
-                            example: 1234
-                        brand:
-                            type: string
-                            example: Product brand
-                        slug:
-                            type: string
-                            example: Product slug
+                            example: 200
+                        data:
+                            type: object
+                            properties:
+                                id:
+                                    type: integer
+                                    format: int64
+                                    example: 1
+                                name:
+                                    type: string
+                                    example: Product name
+                                price:
+                                    type: float
+                                    example: 1234
+                                brand:
+                                    type: string
+                                    example: Product brand
+                                slug:
+                                    type: string
+                                    example: Product slug
 
                 login:
                     type: object

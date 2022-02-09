@@ -6,7 +6,7 @@ use App\Entity\Resource\Product;
 use App\Repository\ProductRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Knp\Component\Pager\Pagination\PaginationInterface;
+use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -37,9 +37,15 @@ class ProductController extends AbstractController
      * )
      * @Rest\View(serializerGroups={ "Default", "items"="listProduct" })
      */
-    public function listProducts(ParamFetcherInterface $paramFetcher): PaginationInterface
+    public function listProducts(ParamFetcherInterface $paramFetcher): View
     {
-        return $this->productRepository->paginatedProducts($paramFetcher->get('limit'), $paramFetcher->get('page'));
+        $products = $this->productRepository
+            ->paginatedProducts($paramFetcher->get('limit'), $paramFetcher->get('page'));
+
+        return View::create()
+            ->setStatusCode(200)
+            ->setFormat("json")
+            ->setData(["status" => "ok", "status_code" => "200", "data" => $products]);
     }
 
     /**
@@ -50,8 +56,11 @@ class ProductController extends AbstractController
      * )
      * @Rest\View(serializerGroups={ "Default", "items"="showProduct" })
      */
-    public function showProduct(Product $product): Product
+    public function showProduct(Product $product): View
     {
-        return $product;
+        return View::create()
+            ->setStatusCode(200)
+            ->setFormat("json")
+            ->setData(["status" => "ok", "status_code" => "200", "data" => $product]);
     }
 }

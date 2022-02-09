@@ -22,36 +22,27 @@ nelmio_api_doc:
                 createUsers:
                     type: object
                     properties:
-                        status:
+                        email:
                             type: string
-                            example: Created!
-                        status_code:
-                            type: integer
-                            example: 201
-                        data:
+                            example: user@some.where
+                        password:
+                            type: string
+                            example: hash password string
+                        roles:
+                            type: array
+                            items:
+                                type: string
+                            example: [ "ROLE_CUSTOMER_USER" ]
+                        customer:
                             type: object
                             properties:
-                                email:
-                                    type: string
-                                    example: user@some.where
-                                password:
-                                    type: string
-                                    example: hash password string
-                                roles:
-                                    type: array
-                                    items:
-                                        type: string
-                                    example: [ "ROLE_CUSTOMER_USER" ]
-                                customer:
-                                    type: object
-                                    properties:
-                                        id:
-                                            type: integer
-                                            format: int64
-                                            example: 1
-                                slug:
-                                    type: string
-                                    example: user name (lowercase)
+                                id:
+                                    type: integer
+                                    format: int64
+                                    example: 1
+                        slug:
+                            type: string
+                            example: user name (lowercase)
 
                 listUsers:
                     type: object
@@ -135,64 +126,124 @@ nelmio_api_doc:
                 token:
                     type: object
                     properties:
-                        token:
+                        status:
                             type: string
-                            example: long string
+                            example: Ok!
+                        status_code:
+                            type: integer
+                            example: 200
+                        data:
+                            type: object
+                            properties:
+                                token:
+                                    type: string
+                                    example: long string
 
                 showUser:
                     type: object
                     properties:
-                        id:
+                        status:
+                            type: string
+                            example: Ok!
+                        status_code:
                             type: integer
-                            format: int64
-                            example: 14
-                        email:
+                            example: 200
+                        data:
+                            type: object
+                            properties:
+                                id:
+                                    type: integer
+                                    format: int64
+                                    example: 14
+                                email:
+                                    type: string
+                                    example: user@some.where
+                                customer:
+                                    allOf:
+                                        - $ref: '#/components/schemas/customer'
+                                created_at:
+                                    type: string
+                                    example: "2021-12-01 21:27:00"
+                                updated_at:
+                                    type: string
+                                    example: "2021-12-01 21:27:00"
+                                slug:
+                                    type: string
+                                    example: user name (lowercase)
+
+                showCreatedUser:
+                    type: object
+                    properties:
+                        status:
                             type: string
-                            example: user@some.where
-                        customer:
-                            allOf:
-                                - $ref: '#/components/schemas/customer'
-                        created_at:
-                            type: string
-                            example: "2021-12-01 21:27:00"
-                        updated_at:
-                            type: string
-                            example: "2021-12-01 21:27:00"
-                        slug:
-                            type: string
-                            example: user name (lowercase)
+                            example: Created!
+                        status_code:
+                            type: integer
+                            example: 201
+                        data:
+                            type: object
+                            properties:
+                                id:
+                                    type: integer
+                                    format: int64
+                                    example: 14
+                                email:
+                                    type: string
+                                    example: user@some.where
+                                customer:
+                                    allOf:
+                                        - $ref: '#/components/schemas/customer'
+                                created_at:
+                                    type: string
+                                    example: "2021-12-01 21:27:00"
+                                updated_at:
+                                    type: string
+                                    example: "2021-12-01 21:27:00"
+                                slug:
+                                    type: string
+                                    example: user name (lowercase)
+
 
                 showProduct:
                     type: object
                     properties:
-                        id:
+                        status:
+                            type: string
+                            example: Ok!
+                        status_code:
                             type: integer
-                            format: int64
-                            example: 14
-                        name:
-                            type: string
-                            example: Product name
-                        price:
-                            type: float
-                            example: 1234
-                        description:
-                            type: string
-                            example: Product description
-                        pictures:
-                            allOf:
-                                - $ref: '#/components/schemas/picture'
-                        brand:
-                            type: string
-                            example: Product brand
-                        created_at:
-                            type: string
-                            example: "2021-12-01 21:27:00"
-                        updated_at:
-                            type: string
-                            example: "2021-12-01 21:27:00"
-                        slug:
-                            type: string
-                            example: Product slug
+                            example: 200
+                        data:
+                            type: object
+                            properties:
+                                id:
+                                    type: integer
+                                    format: int64
+                                    example: 14
+                                name:
+                                    type: string
+                                    example: Product name
+                                price:
+                                    type: float
+                                    example: 1234
+                                description:
+                                    type: string
+                                    example: Product description
+                                pictures:
+                                    allOf:
+                                        - $ref: '#/components/schemas/picture'
+                                brand:
+                                    type: string
+                                    example: Product brand
+                                created_at:
+                                    type: string
+                                    example: "2021-12-01 21:27:00"
+                                updated_at:
+                                    type: string
+                                    example: "2021-12-01 21:27:00"
+                                slug:
+                                    type: string
+                                    example: Product slug
 
                 customer:
                     type: object
@@ -351,7 +402,7 @@ nelmio_api_doc:
                             content:
                                 application/json:
                                     schema:
-                                        $ref: '#/components/schemas/showUser'
+                                        $ref: '#/components/schemas/showCreatedUser'
                         '400':
                             description: Bad request! Return a JSON array of code and error.
                             content:

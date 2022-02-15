@@ -54,11 +54,11 @@ class Product
     private ?string $name;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      * @Serializer\Groups({ "showProduct", "listProduct" })
      */
-    private ?float $price;
+    private ?string $price;
 
     /**
      * @ORM\Column(type="text")
@@ -103,12 +103,12 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice(): ?string
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): self
+    public function setPrice(string $price): self
     {
         $this->price = $price;
 

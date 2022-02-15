@@ -3,7 +3,11 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
-        "phptest": "php ./vendor/bin/phpunit --coverage-html public/code-coverage"
+        "phptest": "php ./vendor/bin/phpunit --coverage-html public/code-coverage",
+        "scc:c": "symfony console cache:clear",
+        "scm:m": "symfony console make:migration",
+        "scd:m:m": "symfony console doctrine:migrations:migrate",
+        "scm:t": "symfony console make:test"
     },
     "dependencies": {}
 }

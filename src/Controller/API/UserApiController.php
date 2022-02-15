@@ -10,10 +10,9 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 #[Route(path: "/api")]
@@ -85,8 +84,12 @@ class UserApiController extends AbstractFOSRestController
      *     }
      * )
      */
-    public function createUsers(User $user, ConstraintViolationList $violations, UserRepository $userRepository): View
-    {
+    public function createUsers(
+        User $user,
+        ConstraintViolationList $violations,
+        UserRepository $userRepository,
+        UserPasswordHasherInterface $userPasswordHasher
+    ): View {
         if (count($violations)) {
             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
             foreach ($violations as $violation) {
@@ -98,6 +101,8 @@ class UserApiController extends AbstractFOSRestController
             }
             throw new BadRequestHttpException($message);
         }
+
+        $user->setPassword($userPasswordHasher->hashPassword($user, $user->getPassword()));
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

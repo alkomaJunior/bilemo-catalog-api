@@ -45,7 +45,7 @@ class ProductController extends AbstractController
         return View::create()
             ->setStatusCode(200)
             ->setFormat("json")
-            ->setData(["status" => "ok", "status_code" => "200", "data" => $products]);
+            ->setData(["code" => "Success!", "data" => $products]);
     }
 
     /**
@@ -61,6 +61,6 @@ class ProductController extends AbstractController
         return View::create()
             ->setStatusCode(200)
             ->setFormat("json")
-            ->setData(["status" => "ok", "status_code" => "200", "data" => $product]);
+            ->setData(["code" => "Success", "data" => $product]);
     }
 }

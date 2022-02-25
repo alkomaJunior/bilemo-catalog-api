@@ -12,7 +12,7 @@ class AuthenticationSuccessListener
      */
     public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
     {
-        $data = ["status" => "Ok!", 'status_code' => $event->getResponse()->getStatusCode()];
+        $data = ["code" => "Success!"];
         $user = $event->getUser();
 
         if (!$user instanceof UserInterface) {
@@ -20,8 +20,8 @@ class AuthenticationSuccessListener
         }
 
         $data['data'] = array(
-            'roles' => $user->getRoles(),
-            'token' => $event->getData(),
+            $event->getData(),
+            'token-expire' => '3600',
         );
 
         $event->setData($data);

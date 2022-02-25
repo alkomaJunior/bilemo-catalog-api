@@ -51,7 +51,7 @@ class UserApiController extends AbstractFOSRestController
         return View::create()
             ->setStatusCode(200)
             ->setFormat("json")
-            ->setData(["status" => "ok", "status_code" => "200", "data" => $users]);
+            ->setData(["code" => "Success!", "data" => $users]);
     }
 
     /**
@@ -67,7 +67,7 @@ class UserApiController extends AbstractFOSRestController
         return View::create()
             ->setStatusCode(200)
             ->setFormat("json")
-            ->setData(["status" => "ok", "status_code" => "200", "data" => $user]);
+            ->setData(["code" => "Success!", "data" => $user]);
     }
 
     /**
@@ -111,7 +111,7 @@ class UserApiController extends AbstractFOSRestController
         return View::create()
             ->setStatusCode(201)
             ->setFormat("json")
-            ->setData(["status" => "Created!", "status_code" => "201", "data" => $data]);
+            ->setData(["code" => "Created!", "data" => $data]);
     }
 
     /**

@@ -15,7 +15,7 @@ class AuthenticationSuccessListener
         $data = ["code" => "Success!"];
         $user = $event->getUser();
 
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof UserInterface || $user->getRoles()[0] === "ROLE_TEST") {
             return;
         }
 

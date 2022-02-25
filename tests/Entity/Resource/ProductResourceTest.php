@@ -51,7 +51,7 @@ class ProductResourceTest extends KernelTestCase
         $pictures = [(new PictureTestCaseTest())->getEntity()];
 
         $this->assertIsString($product->setName("Galaxy 5")->getName());
-        $this->assertIsFloat($product->setPrice(12345)->getPrice());
+        $this->assertIsNumeric($product->setPrice(1234.50)->getPrice());
         $this->assertIsString($product->setDescription("Product description")->getDescription());
         $this->assertIsString($product->setBrand("Samsung")->getBrand());
         $this->assertIsString($product->setSlug("galaxy")->getSlug());

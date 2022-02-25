@@ -4,9 +4,6 @@
 
 API crafting for BilMo customers/partners.
 
-## Test coverage report
-url
-
 ## Environment and technologies
 * Symfony 5.3.12
 * Composer 2.1.12
@@ -25,7 +22,7 @@ composer install
 ## Database
 Set up your database url in .env file:
 ```
-DATABASE_URL=mysql://database_user:database_password@127.0.0.1:3306/bilemo-api?version=your_database_version
+DATABASE_URL=mysql://database_user:database_password@127.0.0.1:3306/database_name?version=your_database_version
 ```
 Create the database with the following command:
 ```

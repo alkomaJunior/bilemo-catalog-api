@@ -2,6 +2,9 @@
 
 namespace App\Tests\Controller\API;
 
+use App\Entity\Resource\User;
+use App\EventListener\AuthenticationSuccessListener;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -43,7 +46,7 @@ class UserEndpointsTest extends WebTestCase
 
         $content = $this->client->getResponse()->getContent();
 
-        return json_decode($content)->token;
+        return json_decode($content)->{'data'}->{'0'}->{'token'};
     }
 
     public function testNonAuthenticatedListUser(): void
@@ -55,7 +58,9 @@ class UserEndpointsTest extends WebTestCase
 
     public function testListUsers(): void
     {
-        $this->client->request('GET', '/api/users',
+        $this->client->request(
+            'GET',
+            '/api/users',
             [],
             [],
             [
@@ -71,7 +76,9 @@ class UserEndpointsTest extends WebTestCase
 
     public function testShowUserNotFound(): void
     {
-        $this->client->request('GET', '/api/users/19',
+        $this->client->request(
+            'GET',
+            '/api/users/19',
             [],
             [],
             [
@@ -90,7 +97,9 @@ class UserEndpointsTest extends WebTestCase
             self::$kernel->getProjectDir() . '/tests/Repository/UserRepositoryTestFixtures.yaml'
         ]);
 
-        $this->client->request('GET', '/api/users/1',
+        $this->client->request(
+            'GET',
+            '/api/users/1',
             [],
             [],
             [
@@ -162,7 +171,9 @@ class UserEndpointsTest extends WebTestCase
             self::$kernel->getProjectDir() . '/tests/Repository/UserRepositoryTestFixtures.yaml'
         ]);
 
-        $this->client->request('DELETE', '/api/users/1',
+        $this->client->request(
+            'DELETE',
+            '/api/users/1',
             [],
             [],
             [
@@ -172,5 +183,17 @@ class UserEndpointsTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+    }
+
+    public function testAuthenticationEventListener()
+    {
+        $e = new AuthenticationSuccessListener();
+
+        $user = new User();
+        $user->setRoles(['ROLE_TEST']);
+
+        $this->assertNull(
+            $e->onAuthenticationSuccessResponse(new AuthenticationSuccessEvent([], $user, new Response()))
+        );
     }
 }

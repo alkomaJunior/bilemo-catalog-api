@@ -46,7 +46,7 @@ class ProductEndpointsTest extends WebTestCase
 
         $content = $this->client->getResponse()->getContent();
 
-        return json_decode($content)->token;
+        return json_decode($content)->{'data'}->{'0'}->{'token'};
     }
 
     public function testNonAuthenticatedListProducts(): void
